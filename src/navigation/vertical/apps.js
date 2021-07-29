@@ -28,16 +28,6 @@ export default [
     icon: <Calendar size={20} />,
     navLink: '/apps/calendar'
   },
-  ///
-{
-  id: 'test1',
-  title: 'test1',
-  icon: <Facebook size={20} />,
-  externalLink: true,
-  newTab: true,
-  navLink: 'https://facebook.com/'
-},
-  ///
   {
     id: 'invoiceApp',
     title: 'Invoice',

@@ -46,6 +46,7 @@ const Register = () => {
   }
 
   const onSubmit = () => {
+    console.log("Register.js/onSubmit")
     if (isObjEmpty(errors)) {
       useJwt
         .register({ username, email, password })

@@ -5,6 +5,7 @@ const config = useJwt.jwtConfig
 
 // ** Handle User Login
 export const handleLogin = data => {
+  console.log("data", data)
   return dispatch => {
     dispatch({
       type: 'LOGIN',

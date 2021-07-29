@@ -22,7 +22,11 @@ import BlankLayout from '@layouts/BlankLayout'
 import VerticalLayout from '@src/layouts/VerticalLayout'
 import HorizontalLayout from '@src/layouts/HorizontalLayout'
 
+// ** cookie
+import Cookies from 'universal-cookie'
+
 const Router = () => {
+  console.log("Router")
   // ** Hooks
   const [layout, setLayout] = useLayout()
   const [transition, setTransition] = useRouterTransition()
@@ -65,15 +69,23 @@ const Router = () => {
   /**
    ** Final Route Component Checks for Login & User Role and then redirects to the route
    */
-  const FinalRoute = props => {
+  const FinalRoute = props => { 
     const route = props.route
     let action, resource
 
+    
+    // if (!payload) return <Redirect push to="/login" />
+    // return <Route component={component} {...rest} />
+    
     // ** Assign vars based on route meta
     if (route.meta) {
+      console.log("84.here", route.meta)
       action = route.meta.action ? route.meta.action : null
       resource = route.meta.resource ? route.meta.resource : null
     }
+    //payload
+    const payload = new Cookies().get('payload')
+    console.log('89.payload', payload)
 
     if (
       (!isUserLoggedIn() && route.meta === undefined) ||
@@ -85,13 +97,15 @@ const Router = () => {
        ** If user is not Logged in & route.meta.authRoute, !route.meta.publicRoute are undefined
        ** Then redirect user to login
        */
-
+      console.log("98.here")
       return <Redirect to='/login' />
-    } else if (route.meta && route.meta.authRoute && isUserLoggedIn()) {
+    } else if (route.meta && route.meta.authRoute && isUserLoggedIn() && payload) {
       // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
+      console.log("102.here")
       return <Redirect to='/' />
     } else if (isUserLoggedIn() && !ability.can(action || 'read', resource)) {
       // ** If user is Logged in and doesn't have ability to visit the page redirect the user to Not Authorized
+      console.log("106.here")
       return <Redirect to='/misc/not-authorized' />
     } else {
       // ** If none of the above render component

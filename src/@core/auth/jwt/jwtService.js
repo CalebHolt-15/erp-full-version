@@ -19,16 +19,20 @@ export default class JwtService {
       config => {
         // ** Get token from localStorage
         const accessToken = this.getToken()
-
+        console.log('22.accessToken', accessToken)
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
+          console.log('24.if accesstoken:', accessToken)
           // ** eslint-disable-next-line no-param-reassign
           config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
         }
         return config
       },
+
       error => Promise.reject(error)
     )
+
+    console.log('34.here:')
 
     // ** Add request/response interceptor
     axios.interceptors.response.use(
@@ -38,8 +42,10 @@ export default class JwtService {
         const { config, response } = error
         const originalRequest = config
 
+        console.log("45.here")
         // ** if (status === 401) {
         if (response && response.status === 401) {
+          console.log('48.here')
           if (!this.isAlreadyFetchingAccessToken) {
             this.isAlreadyFetchingAccessToken = true
             this.refreshToken().then(r => {
@@ -53,6 +59,7 @@ export default class JwtService {
             })
           }
           const retryOriginalRequest = new Promise(resolve => {
+          console.log('62.here')
             this.addSubscriber(accessToken => {
               // ** Make sure to assign accessToken according to your response.
               // ** Check: https://pixinvent.ticksy.com/ticket/2413870
@@ -101,6 +108,7 @@ export default class JwtService {
   }
 
   refreshToken() {
+    console.log("106.here")
     return axios.post(this.jwtConfig.refreshEndpoint, {
       refreshToken: this.getRefreshToken()
     })

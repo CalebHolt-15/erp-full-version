@@ -1,4 +1,4 @@
-import { useState, useContext, Fragment } from 'react'
+import { useState, useContext, Fragment, useEffect } from 'react'
 import classnames from 'classnames'
 import Avatar from '@components/avatar'
 import { useSkin } from '@hooks/useSkin'
@@ -55,24 +55,32 @@ const Login = props => {
   const illustration = skin === 'dark' ? 'login-v2-dark.svg' : 'login-v2.svg',
     source = require(`@src/assets/images/pages/${illustration}`).default
 
-  const onSubmit = data => {
+  const onSubmit = data => { 
+    console.log("Login.js")
     if (isObjEmpty(errors)) {
+      console.log("isObjEmpty:", isObjEmpty)
+      // console.log("errors:", errors)
+      // go to jwtService
       useJwt
-        .login({ email, password })
+        .login({ email, password })//.then back from fakedb/jwt/index.js///res is a props from (response) from fakedb/jwt/index.js
         .then(res => {
-          const data = { ...res.data.userData, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken }
+          console.log("68.res:", res)
+          const data = { ...res.data, accessToken: res.data.accessToken, refreshToken: res.data.refreshToken }
           dispatch(handleLogin(data))
-          ability.update(res.data.userData.ability)
+          ability.update(res.data.ability)
+          console.log("data:///", data)
           history.push(getHomeRouteForLoggedInUser(data.role))
           toast.success(
-            <ToastContent name={data.fullName || data.username || 'John Doe'} role={data.role || 'admin'} />,
+            <ToastContent name={res.data.fullName || res.data.username || 'John Doe'} role={res.data.role || 'admin'} />,
             { transition: Slide, hideProgressBar: true, autoClose: 2000 }
           )
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          console.error(err)
+        })
     }
   }
-
+ 
   return (
     <div className='auth-wrapper auth-v2'>
       <Row className='auth-inner m-0'>
@@ -173,7 +181,7 @@ const Login = props => {
                   id='login-email'
                   name='login-email'
                   placeholder='john@example.com'
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={e => setEmail(e.target.value)}//******/
                   className={classnames({ 'is-invalid': errors['login-email'] })}
                   innerRef={register({ required: true, validate: value => value !== '' })}
                 />

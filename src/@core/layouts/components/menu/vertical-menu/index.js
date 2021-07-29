@@ -15,6 +15,8 @@ import VerticalNavMenuItems from './VerticalNavMenuItems'
 const Sidebar = props => {
   // ** Props
   const { menuCollapsed, routerProps, menu, currentActiveItem, skin } = props
+  console.log("skin", skin)
+
 
   // ** States
   const [groupOpen, setGroupOpen] = useState([])

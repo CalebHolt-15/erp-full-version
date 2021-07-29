@@ -8,7 +8,11 @@ const DashboardRoutes = [
   },
   {
     path: '/dashboard/ecommerce',
-    component: lazy(() => import('../../views/dashboard/ecommerce')),
+    component: lazy(() => import('../../views/dashboard/ecommerce'))
+  },
+  {
+    path: '/dashboard/homepage1',
+    component: lazy(() => import('../../views/dashboard/homepage1')),
     exact: true
   }
 ]

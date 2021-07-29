@@ -15,6 +15,7 @@ import { IntlProviderWrapper } from './utility/context/Internationalization'
 
 // ** Spinner (Splash Screen)
 import Spinner from './@core/components/spinner/Fallback-spinner'
+import { SnackbarProvider } from 'notistack'
 
 // ** Ripple Button
 import './@core/components/ripple-button'
@@ -48,16 +49,21 @@ ReactDOM.render(
   <Provider store={store}>
     <Suspense fallback={<Spinner />}>
       <AbilityContext.Provider value={ability}>
-        <ThemeContext>
-          <IntlProviderWrapper>
-            <LazyApp />
-            <ToastContainer newestOnTop />
-          </IntlProviderWrapper>
-        </ThemeContext>
+        <SnackbarProvider
+                    maxSnack={3}
+                    autoHideDuration={3000}
+                  >
+           <ThemeContext>
+              <IntlProviderWrapper>
+                <LazyApp />
+                <ToastContainer newestOnTop />
+              </IntlProviderWrapper>
+           </ThemeContext>
+          </SnackbarProvider>
       </AbilityContext.Provider>
     </Suspense>
-  </Provider>,
-  document.getElementById('root')
+    </Provider>,   
+  document.getElementById('root') 
 )
 
 // If you want your app to work offline and load faster, you can change
