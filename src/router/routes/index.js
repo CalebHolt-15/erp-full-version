@@ -8,6 +8,8 @@ import DashboardRoutes from './Dashboards'
 import UiElementRoutes from './UiElements'
 import ExtensionsRoutes from './Extensions'
 import PageLayoutsRoutes from './PageLayouts'
+import SchoolRoutes from './Schools'
+
 
 // ** Document title
 const TemplateTitle = '%s - Vuexy React Admin Template'
@@ -25,7 +27,8 @@ const Routes = [
   ...PageLayoutsRoutes,
   ...FormRoutes,
   ...TablesRoutes,
-  ...ChartMapsRoutes
+  ...ChartMapsRoutes,
+  ...SchoolRoutes
 ]
 
 export { DefaultRoute, TemplateTitle, Routes }

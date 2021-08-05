@@ -3,4 +3,19 @@
     
   "eslintConfig": {
     "extends": "react-app"
-  },
+},
+  
+//
+const initialValues = {
+    name: '',
+    address: {
+      line: '',
+      landmark: '',
+      city: '',
+      state: '',
+      pincode: '',
+    },
+    board: '',
+    phNo: '',
+    password: '',
+  };
