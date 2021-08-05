@@ -44,6 +44,7 @@ const ToastContent = ({ name, role }) => (
 )
 
 const Login = props => {
+  console.log("Login")
   const [skin, setSkin] = useSkin()
   const ability = useContext(AbilityContext)
   const dispatch = useDispatch()
