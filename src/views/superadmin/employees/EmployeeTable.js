@@ -18,9 +18,17 @@ import Remove from "@material-ui/icons/Remove"
 import SaveAlt from "@material-ui/icons/SaveAlt"
 import Search from "@material-ui/icons/Search"
 import ViewColumn from "@material-ui/icons/ViewColumn"
-import { IconButton } from "@material-ui/core"
+
 import MaterialTable from "material-table"
 import { Field, Form, Formik } from "formik"
+import { createTheme } from "react-data-table-component"
+import { ThemeProvider } from "styled-components"
+import {
+  MuiThemeProvider,
+  createMuiTheme,
+  FormControlLabel,
+  Switch
+} from "@material-ui/core"
 
 //materialTable
 const EmployeeTable = (props) => {
@@ -51,10 +59,33 @@ const EmployeeTable = (props) => {
     )),
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />)
   }
+
+  const [preferDarkMode, setPreferDarkMode] = useState(() => {
+    const mode = localStorage.getItem("_tableDarkMode")
+    return mode === "true" || false
+  })
+
+  const theme = createMuiTheme({
+    palette: {
+      type: preferDarkMode ? "dark" : "light",
+      background: {
+        paper: preferDarkMode ? "#343D55" : "#fff",
+        default: preferDarkMode ? "#303030" : "#fafafa"
+      }
+    }
+  })
+
+  const handleDarkModeChange = () => {
+    setPreferDarkMode(!preferDarkMode)
+    localStorage.setItem("_tableDarkMode", !preferDarkMode)
+  }
   // const { useState } = React
   const [empData, setEmpData] = useState([])
   const [columns, setColumns] = useState([
-    { title: "Name", field: "name" },
+    {
+      title: "Name",
+      field: "name"
+    },
     { title: "Email", field: "email", initialEditValue: "mn@gmail.com" },
     { title: "Password", field: "password" }
   ])
@@ -149,31 +180,51 @@ const EmployeeTable = (props) => {
     }
   }
   //CRUD
-  
+
   return (
-    <MaterialTable
-      icons={tableIcons}
-      columns={columns}
-      data={empData}
-      options={{ actionsColumnIndex: -1, addRowPosition: "first" }}
-      editable={{
-        onRowAdd: (newRow) => {
-          return new Promise((resolve, reject) => {
-            onSubmit(newRow, resolve)
-          })
-        },
-        onRowUpdate: (newData, oldData) => {
-          return new Promise((resolve, reject) => {
-            onUpdate(oldData, newData, resolve)
-          })
-        },
-        onRowDelete: (oldData) => {
-          return new Promise((resolve, reject) => {
-            onDelete(oldData._id, resolve)
-          })
-        }
-      }}
-    />
+    <div className="App">
+      <h1 align="center">Employees</h1>
+      <h4 align="center">Registration and Update Table</h4>
+      <FormControlLabel
+        value="top"
+        control={<Switch color="#343D55" checked={preferDarkMode} />}
+        onChange={handleDarkModeChange}
+        label={preferDarkMode ? "Dark Mode" : "Light Mode"}
+        labelPlacement="top"
+      />
+      <MuiThemeProvider theme={theme}>
+        <MaterialTable
+          icons={tableIcons}
+          columns={columns}
+          data={empData}
+          options={{
+            actionsColumnIndex: -1,
+            addRowPosition: "first"
+            // headerStyle: {
+            //   backgroundColor: "#343D55",
+            //   color: "#FFF"
+            // }
+          }}
+          editable={{
+            onRowAdd: (newRow) => {
+              return new Promise((resolve, reject) => {
+                onSubmit(newRow, resolve)
+              })
+            },
+            onRowUpdate: (newData, oldData) => {
+              return new Promise((resolve, reject) => {
+                onUpdate(oldData, newData, resolve)
+              })
+            },
+            onRowDelete: (oldData) => {
+              return new Promise((resolve, reject) => {
+                onDelete(oldData._id, resolve)
+              })
+            }
+          }}
+        />
+      </MuiThemeProvider>
+    </div>
   )
 }
 
