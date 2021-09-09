@@ -1,5 +1,6 @@
 // ** UseJWT import to get config
 import useJwt from "@src/auth/jwt/useJwt"
+import Cookies from "universal-cookie"
 
 const config = useJwt.jwtConfig
 
@@ -31,6 +32,10 @@ export const handleLogin = (data) => {
 
 // ** Handle User Logout
 export const handleLogout = () => {
+  console.log("handleLogout.config:", config)
+  console.log("handleLogout.config:", config)
+  const cookies = new Cookies()
+
   return (dispatch) => {
     dispatch({
       type: "LOGOUT",
@@ -40,7 +45,11 @@ export const handleLogout = () => {
 
     // ** Remove user, accessToken & refreshToken from localStorage
     localStorage.removeItem("userData")
-    localStorage.removeItem(config.storageTokenKeyName)
-    localStorage.removeItem(config.storageRefreshTokenKeyName)
+    // localStorage.removeItem(config.storageTokenKeyName)
+    // localStorage.removeItem(config.storageRefreshTokenKeyName)
+    cookies.remove("payload", {path: "/", domain: "127.0.0.1"})
+    cookies.remove("XSRF-TOKEN", {path: "/", domain: "127.0.0.1"})
+    cookies.remove("_csrf", {path: "/", domain: "127.0.0.1"})
+    //  resolve()
   }
 }

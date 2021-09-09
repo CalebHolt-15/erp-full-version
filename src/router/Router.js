@@ -30,7 +30,7 @@ import HorizontalLayout from "@src/layouts/HorizontalLayout"
 // ** cookie
 import Cookies from "universal-cookie"
 
-const Router = () => {
+const Router = (props) => {
   console.log("Router")
   // ** Hooks
   const [layout, setLayout] = useLayout()

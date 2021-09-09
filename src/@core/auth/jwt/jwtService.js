@@ -1,4 +1,5 @@
 import axios from "axios"
+import Cookies from "universal-cookie"
 import jwtDefaultConfig from "./jwtDefaultConfig"
 
 export default class JwtService {
@@ -18,7 +19,10 @@ export default class JwtService {
     axios.interceptors.request.use(
       (config) => {
         // ** Get token from localStorage
-        const accessToken = localStorage.getItem("token")
+
+        // const accessToken = localStorage.getItem("token") //this.getToken()
+        const accessToken = new Cookies().get("payload") //this.getToken()
+
         console.log("22.accessToken", accessToken)
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
@@ -76,41 +80,49 @@ export default class JwtService {
   }
 
   onAccessTokenFetched(accessToken) {
+    console.log("onAccessTokenFetched")
     this.subscribers = this.subscribers.filter((callback) => {
       callback(accessToken)
     })
   }
 
   addSubscriber(callback) {
+    console.log("addSubscriber")
     this.subscribers.push(callback)
   }
 
   getToken() {
+    console.log("getToken")
     return localStorage.getItem(this.jwtConfig.storageTokenKeyName)
   }
 
   getRefreshToken() {
+    console.log("getRefreshToken")
     return localStorage.getItem(this.jwtConfig.storageRefreshTokenKeyName)
   }
 
   setToken(value) {
+    console.log("setToken")
     localStorage.setItem(this.jwtConfig.storageTokenKeyName, value)
   }
 
   setRefreshToken(value) {
+    console.log("setRefreshToken")
     localStorage.setItem(this.jwtConfig.storageRefreshTokenKeyName, value)
   }
 
   login(...args) {
+    console.log("login")
     return axios.post(this.jwtConfig.loginEndpoint, ...args)
   }
 
   register(...args) {
+    console.log("register")
     return axios.post(this.jwtConfig.registerEndpoint, ...args)
   }
 
   refreshToken() {
-    console.log("106.here")
+    console.log("128.refreshToken")
     return axios.post(this.jwtConfig.refreshEndpoint, {
       refreshToken: this.getRefreshToken()
     })
