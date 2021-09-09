@@ -53,11 +53,9 @@ const EmployeeTable = (props) => {
   }
   // const { useState } = React
   const [empData, setEmpData] = useState([])
-  const [addedData, setAddedData] = useState([])
-
   const [columns, setColumns] = useState([
     { title: "Name", field: "name" },
-    { title: "Email", field: "email" },
+    { title: "Email", field: "email", initialEditValue: "mn@gmail.com" },
     { title: "Password", field: "password" }
   ])
 
@@ -67,34 +65,8 @@ const EmployeeTable = (props) => {
     setReload((reload) => !reload)
   }
 
-  useEffect(() => {
-    const getEmployees = async (values) => {
-      console.log("getEmployees")
-      const options = {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-        data: { ...values },
-        withCredentials: true,
-        url: "https://127.0.0.1:8089/api/employee/empData"
-      }
-      try {
-        const { data } = await axios(options)
-        // console.log("employees:", data)
-        setEmpData(data)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    getEmployees()
-  }, [
-    "https://127.0.0.1:8089/api/employee/empData",
-    "https://127.0.0.1:8089/api/employee",
-    reload
-  ])
-
-  console.log("empData///", empData)
-  console.log("props: ", props)
-
+  //CRUD
+  //********   Create  ****************
   const onSubmit = async (newRow, resolve) => {
     console.log("onSubmit.values:", newRow)
     console.log("props:", props)
@@ -116,16 +88,88 @@ const EmployeeTable = (props) => {
     }
   }
 
+  //********   Read *************/
+  useEffect(() => {
+    const getEmployees = async (values) => {
+      console.log("getEmployees")
+      const options = {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+        data: { ...values },
+        withCredentials: true,
+        url: "https://127.0.0.1:8089/api/employee/empData"
+      }
+      try {
+        const { data } = await axios(options)
+        // console.log("employees:", data)
+        setEmpData(data)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    getEmployees()
+  }, ["https://127.0.0.1:8089/api/employee/empData", reload])
+
+  //********   Update  ****************
+  const onUpdate = async (oldData, newData, resolve) => {
+    console.log("update.id:", oldData._id)
+    const options = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      data: { ...newData },
+      withCredentials: true,
+      url: `https://127.0.0.1:8089/api/employee/${oldData._id}`
+    }
+    try {
+      const { data } = await axios(options)
+      console.log("updated///:", data)
+      refresh()
+      resolve()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  //********   Delete  ****************
+  const onDelete = async (id, resolve) => {
+    console.log("delete.values.id:", id)
+    const options = {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+      url: `https://127.0.0.1:8089/api/employee/${id}`
+    }
+    try {
+      const { data } = await axios(options)
+      console.log("deleted///:", data)
+      refresh()
+      resolve()
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  //CRUD
+  
   return (
     <MaterialTable
       icons={tableIcons}
       columns={columns}
-      data={empData && empData}
+      data={empData}
       options={{ actionsColumnIndex: -1, addRowPosition: "first" }}
       editable={{
         onRowAdd: (newRow) => {
           return new Promise((resolve, reject) => {
             onSubmit(newRow, resolve)
+          })
+        },
+        onRowUpdate: (newData, oldData) => {
+          return new Promise((resolve, reject) => {
+            onUpdate(oldData, newData, resolve)
+          })
+        },
+        onRowDelete: (oldData) => {
+          return new Promise((resolve, reject) => {
+            onDelete(oldData._id, resolve)
           })
         }
       }}
