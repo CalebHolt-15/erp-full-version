@@ -43,15 +43,16 @@ const RegisterEmployee = () => {
   }
 
   const onSubmit = async (values) => {
+    console.log("onSubmit")
     const options = {
       method: "POST",
-      headers: {"Content-Type": "application/json"},
-      data: {...values},
+      headers: { "Content-Type": "application/json" },
+      data: { ...values },
       withCredentials: true,
-      url: "https://127.0.0.1:8089/employee"
+      url: "https://127.0.0.1:8089/api/employee"
     }
     try {
-      const {data} = await axios(options)
+      const { data } = await axios(options)
       console.log("added:", data)
     } catch (e) {
       console.error(e)
@@ -120,6 +121,7 @@ const RegisterEmployee = () => {
                       className="mr-1"
                       color="primary"
                       type="submit"
+                      onClick={onSubmit}
                     >
                       Submit
                     </Button.Ripple>
