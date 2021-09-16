@@ -56,10 +56,10 @@ export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
  *  ? e.g. If you are using cookies to store the application please update this function
  */
 export const isUserLoggedIn = () => {
-  console.log("isUserLoggiedIn-Cookies:", Cookies)
+  console.log("isUserLoggiedIn-Cookies:")
   // localStorage.getItem("userData")
   const payload = new Cookies().get("payload")
-  console.log("62.payload:", payload)
+  console.log("utils.payload:", payload)
   return payload
 }
 // export const getUserData = () => JSON.parse(localStorage.getItem('userData'))

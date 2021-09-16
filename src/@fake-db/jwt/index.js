@@ -59,28 +59,36 @@ const jwtConfig = {
 // SIGN IN use Login.js NOT this mock
 mock.onPost("/jwt/login").reply((request) => {
   const { email, password } = JSON.parse(request.data)
-  console.log("82.request.data", request.data)
+  console.log("fakedb.request.data", request.data)
   const userDataSignin = request.data
-  console.log("84.userDataSignin:", userDataSignin)
+  console.log("fakedb.userDataSignin:", userDataSignin)
 
   let error = {
     email: ["Something went wrong"]
   }
-  const user = data.users.find(u => u.email === email && u.password === password)
-  console.log("120.users", user)//with all details
+  const user = data.users.find(
+    (u) => u.email === email && u.password === password
+  )
+  console.log("fakedb.users", user) //with all details
 
   if (user) {
     try {
-      const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret, {expiresIn: jwtConfig.expireTime})
-      const refreshToken = jwt.sign({ id: user.id }, jwtConfig.refreshTokenSecret, {
-        expiresIn: jwtConfig.refreshTokenExpireTime
+      const accessToken = jwt.sign({ id: user.id }, jwtConfig.secret, {
+        expiresIn: jwtConfig.expireTime
       })
-      console.log('134.accessToken', accessToken)
-      console.log('135.refreshToken', refreshToken)
+      const refreshToken = jwt.sign(
+        { id: user.id },
+        jwtConfig.refreshTokenSecret,
+        {
+          expiresIn: jwtConfig.refreshTokenExpireTime
+        }
+      )
+      console.log("fakedb.accessToken", accessToken)
+      console.log("fakedb.refreshToken", refreshToken)
 
       const userData = { ...user }
-      console.log("136.Userdata Signin:", userData)// all details
-        //go to Login.js => .then
+      console.log("fakedb.Userdata Signin:", userData) // all details
+      //go to Login.js => .then
       delete userData.password
 
       const response = {
@@ -103,16 +111,21 @@ mock.onPost("/jwt/login").reply((request) => {
 })
 // REGISTER
 mock.onPost("/jwt/register").reply((request) => {
-  console.log("request.data", request.data)
-  console.log("request", request)
+  console.log("fakedb.request.data", request.data)
+  console.log("fakedb.request", request)
 
   if (request.data.length > 0) {
     const { email, password, username } = JSON.parse(request.data)
-    const isEmailAlreadyInUse = data.users.find(user => user.email === email)
-    const isUsernameAlreadyInUse = data.users.find(user => user.username === username)
+    const isEmailAlreadyInUse = data.users.find((user) => user.email === email)
+    const isUsernameAlreadyInUse = data.users.find(
+      (user) => user.username === username
+    )
+    /* eslint-disable */
     const error = {
       email: isEmailAlreadyInUse ? "This email is already in use." : null,
-      username: isUsernameAlreadyInUse ? "This username is already in use." : null
+      username: isUsernameAlreadyInUse
+        ? "This username is already in use."
+        : null
     }
 
     if (!error.username && !error.email) {
@@ -133,7 +146,7 @@ mock.onPost("/jwt/register").reply((request) => {
 
       //SIGN UP
       const onSignUp = async () => {
-        console.log("onSignUp")
+        console.log("fake-db.onSignUp")
         const options = {
           method: "POST",
           headers: {},
@@ -143,7 +156,7 @@ mock.onPost("/jwt/register").reply((request) => {
         }
         try {
           const data = await axios(options)
-          console.log("onSignUp data", data)
+          console.log("fakedb.onSignUp data", data)
         } catch (e) {
           console.error(e)
           // if (e.response.status === 400) {
@@ -165,7 +178,7 @@ mock.onPost("/jwt/register").reply((request) => {
       userData.id = lastIndex + 1
 
       // data.users.push(userData)
-      console.log("userData", userData)
+      console.log("fakedb.userData", userData)
       onSignUp()
 
       const accessToken = jwt.sign({ id: userData.id }, jwtConfig.secret, {

@@ -88,14 +88,13 @@ const Router = (props) => {
     // return <Route component={component} {...rest} />
 
     // ** Assign vars based on route meta
+    console.log("route:", route)
     if (route.meta) {
-      console.log("84.here", route.meta)
+      console.log("84.route.meta", route.meta)
       action = route.meta.action ? route.meta.action : null
       resource = route.meta.resource ? route.meta.resource : null
     }
-    //payload
-    // const payload = new Cookies().get("payload")
-    // console.log("89.payload", payload)
+    // payload
 
     if (
       (!isUserLoggedIn() && route.meta === undefined) ||
@@ -110,7 +109,7 @@ const Router = (props) => {
        ** If user is not Logged in & route.meta.authRoute, !route.meta.publicRoute are undefined
        ** Then redirect user to login
        */
-      console.log("98.here")
+      console.log("113.here")
       return <Redirect to="/login" />
     } else if (route.meta && route.meta.authRoute && isUserLoggedIn()) {
       // ** If route has meta and authRole and user is Logged in then redirect user to home page (DefaultRoute)
