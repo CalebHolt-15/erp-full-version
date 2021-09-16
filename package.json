@@ -125,13 +125,13 @@
     "react-app-rewire-postcss": "^3.0.2",
     "react-app-rewire-sass-rule": "^2.1.1",
     "react-app-rewired": "^2.1.6",
-    "sass-loader": "^8.0.2"
+    "sass-loader": "^8.0.2",
+    "proxy": "https://127.0.0.1:8089"
   },
   "browserslist": [
     ">0.2%",
     "not dead",
     "not op_mini all"
   ],
-  "homepage": "",
-  "proxy": "https://127.0.0.1:8089"
+  "homepage": ""
 }

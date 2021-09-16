@@ -21,14 +21,15 @@ export default class JwtService {
         // ** Get token from localStorage
 
         // const accessToken = localStorage.getItem("token") //this.getToken()
-        const accessToken = new Cookies().get("payload") //this.getToken()
+        //this.getToken()
+        const accessToken = new Cookies().get("payload")
 
-        console.log("22.accessToken", accessToken)
+        // console.log("22.accessToken", accessToken)
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
           console.log("24.if accesstoken:", accessToken)
           // ** eslint-disable-next-line no-param-reassign
-          config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
+          // config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
         }
         return config
       },
@@ -43,7 +44,7 @@ export default class JwtService {
       (response) => response,
       (error) => {
         // ** const { config, response: { status } } = error
-        const {config, response} = error
+        const { config, response } = error
         const originalRequest = config
 
         console.log("45.here")
@@ -68,8 +69,9 @@ export default class JwtService {
               // ** Make sure to assign accessToken according to your response.
               // ** Check: https://pixinvent.ticksy.com/ticket/2413870
               // ** Change Authorization header
-              originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
-              resolve(this.axios(originalRequest))
+              //  originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
+              //  resolve(this.axios(originalRequest))
+              console.log("73")
             })
           })
           return retryOriginalRequest

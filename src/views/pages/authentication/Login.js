@@ -35,8 +35,9 @@ import {
 } from "reactstrap"
 
 import "@styles/base/pages/page-auth.scss"
+import axios from "axios"
 
-const ToastContent = ({name, role}) => (
+const ToastContent = ({ name, role }) => (
   <Fragment>
     <div className="toastify-header">
       <div className="title-wrapper">
@@ -59,21 +60,21 @@ const Login = (props) => {
   const ability = useContext(AbilityContext)
   const dispatch = useDispatch()
   const history = useHistory()
-  const [email, setEmail] = useState("admin@demo.com")
-  const [password, setPassword] = useState("admin")
+  const [email, setEmail] = useState("michaelnong100@gmail.com")
+  const [password, setPassword] = useState("m")
 
-  const {register, errors, handleSubmit} = useForm()
+  const { register, errors, handleSubmit } = useForm()
   const illustration = skin === "dark" ? "login-v2-dark.svg" : "login-v2.svg",
     source = require(`@src/assets/images/pages/${illustration}`).default
 
-  const onSubmit = (data) => {
+  const onSubmit1 = (data) => {
     console.log("Login.js")
     if (isObjEmpty(errors)) {
       console.log("isObjEmpty:", isObjEmpty)
       // console.log("errors:", errors)
       // go to jwtService
       useJwt
-        .login({email, password}) //.then back from fakedb/jwt/index.js///res is a props from (response) from fakedb/jwt/index.js
+        .login({ email, password }) //.then back from fakedb/jwt/index.js///res is a props from (response) from fakedb/jwt/index.js
         .then((res) => {
           console.log("68.res:", res)
           const data = {
@@ -90,13 +91,37 @@ const Login = (props) => {
               name={res.data.fullName || res.data.username || "John Doe"}
               role={res.data.role || "admin"}
             />,
-            {transition: Slide, hideProgressBar: true, autoClose: 2000}
+            { transition: Slide, hideProgressBar: true, autoClose: 2000 }
           )
         })
         .catch((err) => {
           console.error(err)
         })
     }
+  }
+
+  const onSubmit = async (values, onSubmitProps) => {
+    // toggleLoading()
+    const options = {
+      method: "POST",
+      headers: {},
+      withCredentials: true,
+      data: { ...values },
+      url: "https://127.0.0.1:8089/signin"
+    }
+    try {
+      const data = await axios(options)
+      console.log("data-signedin:", data)
+      // enqueueSnackbar("Welcome")
+      history.push("/")
+    } catch (e) {
+      console.error(e)
+      // if (e.response.status === 401) {
+      //   setMessage("Invalid Phone-number or password combination!")
+      //   enqueueSnackbar("Invalid Phone-number or password combination!")
+      // }
+    }
+    // toggleLoading()
   }
 
   return (
@@ -140,7 +165,7 @@ const Login = (props) => {
                     d="M-5.68434189e-14,2.84217094e-14 L39.1816085,2.84217094e-14 L69.3453773,32.2519224 L101.428699,2.84217094e-14 L138.784583,2.84217094e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L6.71554594,44.4188507 C2.46876683,39.9813776 0.345377275,35.1089553 0.345377275,29.8015838 C0.345377275,24.4942122 0.230251516,14.560351 -5.68434189e-14,2.84217094e-14 Z"
                     id="Path"
                     className="text-primary"
-                    style={{fill: "currentColor"}}
+                    style={{ fill: "currentColor" }}
                   ></path>
                   <path
                     d="M69.3453773,32.2519224 L101.428699,1.42108547e-14 L138.784583,1.42108547e-14 L138.784199,29.8015838 C137.958931,37.3510206 135.784352,42.5567762 132.260463,45.4188507 C128.736573,48.2809251 112.33867,64.5239941 83.0667527,94.1480575 L56.2750821,94.1480575 L32.8435758,70.5039241 L69.3453773,32.2519224 Z"
@@ -208,30 +233,30 @@ const Login = (props) => {
                 id="login-tip"
                 className="position-absolute"
                 size={18}
-                style={{top: "10px", right: "10px"}}
+                style={{ top: "10px", right: "10px" }}
               />
               <UncontrolledTooltip target="login-tip" placement="left">
                 This is just for ACL demo purpose.
               </UncontrolledTooltip>
             </Alert>
+            {/* ****** ******* SignIn form  *********************  */}
             <Form
               className="auth-login-form mt-2"
               onSubmit={handleSubmit(onSubmit)}
             >
               <FormGroup>
-                <Label className="form-label" for="login-email">
+                <Label className="form-label" for="email">
                   Email
                 </Label>
                 <Input
                   autoFocus
                   type="email"
                   value={email}
-                  id="login-email"
-                  name="login-email"
+                  name="email"
                   placeholder="john@example.com"
                   onChange={(e) => setEmail(e.target.value)} //******/
                   className={classnames({
-                    "is-invalid": errors["login-email"]
+                    "is-invalid": errors["email"]
                   })}
                   innerRef={register({
                     required: true,
@@ -241,7 +266,7 @@ const Login = (props) => {
               </FormGroup>
               <FormGroup>
                 <div className="d-flex justify-content-between">
-                  <Label className="form-label" for="login-password">
+                  <Label className="form-label" for="password">
                     Password
                   </Label>
                   <Link to="/forgot-password">
@@ -250,12 +275,12 @@ const Login = (props) => {
                 </div>
                 <InputPasswordToggle
                   value={password}
-                  id="login-password"
-                  name="login-password"
+                  id="password"
+                  name="password"
                   className="input-group-merge"
                   onChange={(e) => setPassword(e.target.value)}
                   className={classnames({
-                    "is-invalid": errors["login-password"]
+                    "is-invalid": errors["password"]
                   })}
                   innerRef={register({
                     required: true,
@@ -275,6 +300,7 @@ const Login = (props) => {
                 Sign in
               </Button.Ripple>
             </Form>
+            {/* **************  SignIn form   ***********************         */}
             <p className="text-center mt-2">
               <span className="mr-25">New on our platform?</span>
               <Link to="/register">

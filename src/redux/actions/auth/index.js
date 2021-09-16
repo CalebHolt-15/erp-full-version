@@ -11,22 +11,23 @@ export const handleLogin = (data) => {
     dispatch({
       type: "LOGIN",
       data,
-      config,
-      [config.storageTokenKeyName]: data[config.storageTokenKeyName],
-      [config.storageRefreshTokenKeyName]:
-        data[config.storageRefreshTokenKeyName]
+      config
+      // ,
+      // [config.storageTokenKeyName]: data[config.storageTokenKeyName],
+      // [config.storageRefreshTokenKeyName]:
+      //   data[config.storageRefreshTokenKeyName]
     })
 
     // ** Add to user, accessToken & refreshToken to localStorage
     localStorage.setItem("userData", JSON.stringify(data))
-    localStorage.setItem(
-      config.storageTokenKeyName,
-      JSON.stringify(data.accessToken)
-    )
-    localStorage.setItem(
-      config.storageRefreshTokenKeyName,
-      JSON.stringify(data.refreshToken)
-    )
+    // localStorage.setItem(
+    //   config.storageTokenKeyName,
+    //   JSON.stringify(data.accessToken)
+    // )
+    // localStorage.setItem(
+    //   config.storageRefreshTokenKeyName,
+    //   JSON.stringify(data.refreshToken)
+    // )
   }
 }
 
