@@ -30,6 +30,8 @@ const Register = () => {
   const [valErrors, setValErrors] = useState({})
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
+  const [role, setRole] = useState("super")
+
   // const [ability, setAbility] = useState([
   //   {
   //     action: "manage",
@@ -283,6 +285,28 @@ const Register = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className={classnames({
                     "is-invalid": errors["password"]
+                  })}
+                  innerRef={register({
+                    required: true,
+                    validate: (value) => value !== ""
+                  })}
+                />
+              </FormGroup>
+              <FormGroup>
+                <Label className="form-label" for="role">
+                  Role
+                </Label>
+                <Input
+                  autoFocus
+                  type="text"
+                  value={role}
+                  // placeholder="johndoe"
+                  // id="register-password"
+                  name="role"
+                  // className="input-group-merge"
+                  // onChange={(e) => setPassword(e.target.value)}
+                  className={classnames({
+                    "is-invalid": errors["role"]
                   })}
                   innerRef={register({
                     required: true,
